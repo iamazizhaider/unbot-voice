@@ -1,0 +1,22 @@
+name: test
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Unit tests and eval corpus
+        run: python3 -m unittest discover -s tests -v
+      - name: Action fails on AI drafts
+        id: bad
+        uses: ./
+        continue-on-error: true
+        with:
+          files: "evals/before/*.txt"
+      - run: test "${{ steps.bad.outputs.failed }}" = "true"
+      - name: Action passes on rewrites
+        uses: ./
+        with:
+          files: "evals/after/*.txt"
+          threshold: 10

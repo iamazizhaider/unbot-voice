@@ -1,0 +1,222 @@
+{
+ "version": "2026-11",
+ "patterns": [
+  {
+   "category": "residue",
+   "label": "chatbot pleasantry",
+   "regex": "\\b(certainly!|great question|i hope this helps|happy to help|absolutely!)",
+   "weight": 3,
+   "tip": "Delete it. It's a reply to a prompt, not part of the writing."
+  },
+  {
+   "category": "residue",
+   "label": "offer to do more",
+   "regex": "\\b(would you like me to|let me know if you|feel free to (reach out|ask)|if you'd like, i can)",
+   "weight": 3,
+   "tip": "Delete it. End when the content ends."
+  },
+  {
+   "category": "residue",
+   "label": "AI self-reference",
+   "regex": "\\b(as an ai\\b|as a (large )?language model|as of my (last )?(knowledge|training) (update|cutoff))",
+   "weight": 3,
+   "tip": "Delete it. It's left over from the chat."
+  },
+  {
+   "category": "residue",
+   "label": "placeholder",
+   "regex": "(\\[(your|company|name|insert)[^\\]]*\\]|\\b\\d{4}-XX-XX\\b|INSERT_[A-Z_]+|example\\.com)",
+   "weight": 3,
+   "tip": "Fill it in with the real name, date or link, or remove the line."
+  },
+  {
+   "category": "residue",
+   "label": "tool artifact",
+   "regex": "(contentReference\\[oaicite|utm_source=(chatgpt|openai)|oai_citation)",
+   "weight": 3,
+   "tip": "Remove it. It's a citation or tracking leftover from the AI tool."
+  },
+  {
+   "category": "forced-voice",
+   "label": "manufactured drama",
+   "regex": "(here's the (thing|deal|kicker|catch)|here's why (that|this|it) matters|the result\\?|hot take:|and honestly\\?|let that sink in|read that again|that's the real \\w+|then i realized:)",
+   "weight": 3,
+   "tip": "Cut the setup and just say the point. Usually a plain \"But\" works."
+  },
+  {
+   "category": "forced-voice",
+   "label": "stock opener",
+   "regex": "\\b(in today's (fast-paced|ever-changing|digital|rapidly)|in the (dynamic|ever-evolving|fast-paced) (world|landscape|realm) of|as the world continues to|in an era (where|of)|in the realm of)",
+   "weight": 3,
+   "tip": "Start with your actual claim, problem or scene."
+  },
+  {
+   "category": "forced-voice",
+   "label": "cliche",
+   "regex": "\\b(shouting into the void|no fluff|game[- ]changer|move the needle|at the end of the day|a deep dive|unlock(ing)? the (power|potential|secrets?)|look no further|double-edged sword|to new heights|will never be the same|redefin(e|es|ing) (the|your|how)|(your|full) potential|more than just a|has never been more|the key lies in|a pressing (concern|issue)|warrants? careful consideration|unprecedented (opportunities|access|levels?))",
+   "weight": 2,
+   "tip": "Say the specific thing the cliché is standing in for."
+  },
+  {
+   "category": "forced-voice",
+   "label": "email boilerplate",
+   "regex": "\\b(i hope (this|my) (email|message|note) finds you well|i wanted to (reach out|touch base|provide a quick update)|(forward-thinking|innovative) companies like yours|support your journey|was truly impressed)",
+   "weight": 2,
+   "tip": "Open with the reason you're writing."
+  },
+  {
+   "category": "forced-voice",
+   "label": "whether-you're framing",
+   "regex": "\\bwhether you're an? [^.,;]{1,40} or (an? )?[^.,;]{1,40}",
+   "weight": 2,
+   "tip": "Pick the reader you're actually writing for."
+  },
+  {
+   "category": "forced-voice",
+   "label": "both-sides seesaw",
+   "regex": "\\bon (the )?one hand\\b",
+   "weight": 1,
+   "tip": "Take a position, or say plainly what's uncertain."
+  },
+  {
+   "category": "language",
+   "label": "rule of three",
+   "regex": "\\b(\\w+(?: \\w+)?), (\\w+(?: \\w+)?),? and (\\w+(?: \\w+)?)\\b",
+   "weight": 1,
+   "tip": "Keep a list of three only if all three matter. Two is fine."
+  },
+  {
+   "category": "content",
+   "label": "inflated significance",
+   "regex": "\\b((stands|serves) as a (testament|reminder|beacon)|is a testament to|(plays?|played) a (crucial|pivotal|vital|key|significant) role|a (pivotal|crucial|key) (moment|turning point)|underscores? (its|the) (importance|significance)|setting the stage for|indelible mark|left an? (lasting|enduring) (legacy|impact))",
+   "weight": 3,
+   "tip": "Replace it with what actually happened, and let the reader judge the importance."
+  },
+  {
+   "category": "content",
+   "label": "shaping the conversation",
+   "regex": "\\b(shaped|shaping|shapes) (the )?(conversations?|discussions?|debates?|discourse)",
+   "weight": 2,
+   "tip": "Name who changed their mind, or what changed."
+  },
+  {
+   "category": "content",
+   "label": "weasel attribution",
+   "regex": "\\b(experts (argue|say|believe|note|agree)|observers (have )?(noted|cited|say)|industry reports|some critics (argue|say)|studies (show|suggest) that|many (believe|argue|say)|it is widely (believed|recognized|acknowledged))",
+   "weight": 2,
+   "tip": "Name the source, or cut the claim."
+  },
+  {
+   "category": "content",
+   "label": "challenges-and-legacy formula",
+   "regex": "\\b(despite (these|its|their|the) (challenges|setbacks|obstacles)|faces? (several |many |numerous )?challenges|future outlook|challenges and (legacy|opportunities))",
+   "weight": 2,
+   "tip": "Name the specific problem with a fact, or cut the paragraph."
+  },
+  {
+   "category": "content",
+   "label": "superficial -ing tail",
+   "regex": ",\\s+(highlighting|underscoring|emphasizing|showcasing|reflecting|symbolizing|ensuring|fostering|contributing to|cementing|solidifying|reinforcing|demonstrating)\\b",
+   "weight": 2,
+   "tip": "End the sentence before the \"-ing\" clause, or make it a real claim with a source."
+  },
+  {
+   "category": "content",
+   "label": "vague connection",
+   "regex": "\\b((closely|widely|particularly|often) associated with|in connection (with|to))",
+   "weight": 1,
+   "tip": "Say what the actual relationship is."
+  },
+  {
+   "category": "content",
+   "label": "hedging disclaimer",
+   "regex": "\\b(it('s| is) (important|worth|crucial) (to note|noting|to remember)|while specific details are limited|based on (the )?available information|not widely documented|not publicly available|maintains a low profile)",
+   "weight": 2,
+   "tip": "Cut \"it's important to note\" and just note it."
+  },
+  {
+   "category": "content",
+   "label": "corrective framing",
+   "regex": "\\b(should not be confused with|does not (by itself )?establish|rather than (simply|merely|just))",
+   "weight": 1,
+   "tip": "Drop the straw man unless someone actually believes it."
+  },
+  {
+   "category": "language",
+   "label": "copula avoidance",
+   "regex": "\\b(serves as|stands as|functions as|acts as a|boasts (a|an|the|over|more))\\b",
+   "weight": 2,
+   "tip": "Use \"is\" or \"has\"."
+  },
+  {
+   "category": "language",
+   "label": "negative parallelism",
+   "regex": "(\\bnot (only|just|merely) [^.;:!?]{1,60}\\bbut( also)?\\b|\\bit'?s not (just |merely |only )?[^.;!?]{1,50}[,;—-]+\\s*it'?s\\b|\\bno [\\w\\s]{1,25}\\. no [\\w\\s]{1,25}\\. just\\b)",
+   "weight": 2,
+   "tip": "Skip the \"not X\" part and say Y directly."
+  },
+  {
+   "category": "language",
+   "label": "AI vocabulary (2023-24)",
+   "regex": "\\b(delve[sd]?|delving|tapestry|testament|pivotal|intricate|intricacies|interplay|meticulous(ly)?|bolster(ed|s)?|garner(ed|s)?|underscor(e|es|ed|ing)|vibrant|enduring|landscape|realm|multifaceted|nuanced|embark(ed|s)?|navigat(e|es|ing) the)\\b",
+   "weight": 1,
+   "tip": "Use a plainer word, or keep it if it's the literal meaning."
+  },
+  {
+   "category": "language",
+   "label": "AI vocabulary (2024-25)",
+   "regex": "\\b(showcas(e|es|ed|ing)|highlight(s|ed|ing)?|foster(s|ed|ing)?|enhanc(e|es|ed|ing)|align(s|ed)? with|resonat(e|es|ed|ing) with|seamless(ly)?|robust|holistic|synergy|transformative|cutting-edge|groundbreaking|elevat(e|es|ing)|empower(s|ed|ing)?|unlock(s|ed|ing)?|leverag(e|es|ed|ing))\\b",
+   "weight": 1,
+   "tip": "Use a plainer word: \"show\", \"help\", \"improve\", \"use\"."
+  },
+  {
+   "category": "language",
+   "label": "AI vocabulary (2026)",
+   "regex": "\\b(quietly|steady|dependable|practical|prioriti[sz](e|es|ed|ing)|universally|echoed|clearer|matters)\\b",
+   "weight": 1,
+   "tip": "Fine once. A cluster of these reads as AI."
+  },
+  {
+   "category": "language",
+   "label": "promotional tone",
+   "regex": "\\b(nestled|in the heart of|renowned|breathtaking|must-visit|diverse array|rich (history|heritage|tradition|culture)|world-class|stunning|unparalleled)\\b",
+   "weight": 2,
+   "tip": "Swap the adjective for a fact you can check."
+  },
+  {
+   "category": "language",
+   "label": "stiff synonym",
+   "regex": "\\b(utiliz(e|es|ed|ing)|commenc(e|es|ed)|facilitat(e|es|ed|ing)|endeavou?r(s)?|individuals|in order to ensure|plethora|myriad|paramount)\\b",
+   "weight": 1,
+   "tip": "Use the everyday word: \"use\", \"start\", \"help\", \"people\"."
+  },
+  {
+   "category": "language",
+   "label": "transition stack",
+   "regex": "(^|[.!?]\\s+)(additionally|furthermore|moreover|consequently|notably|importantly|ultimately),",
+   "weight": 1,
+   "tip": "Use a logical connector (\"because\", \"so\", \"but\") or none."
+  },
+  {
+   "category": "style",
+   "label": "summary closer",
+   "regex": "(^|[.!?]\\s+|\\n)(in (summary|conclusion)|overall|to sum up|in essence|all in all)[,:]",
+   "weight": 2,
+   "tip": "Cut the recap. Stop when you're done."
+  },
+  {
+   "category": "style",
+   "label": "emoji bullet/heading",
+   "regex": "(^|\\n)\\s*([-*#]+\\s*)?[🌀-🫿✅✨⚡⭐]",
+   "weight": 2,
+   "tip": "Drop the emoji, or turn the bullets back into prose."
+  },
+  {
+   "category": "style",
+   "label": "inline bold label",
+   "regex": "(^|\\n)\\s*[-*]\\s+\\*\\*[^*\\n]{1,40}:?\\*\\*:?",
+   "weight": 1,
+   "tip": "Turn \"**Label:** text\" bullets back into sentences."
+  }
+ ]
+}

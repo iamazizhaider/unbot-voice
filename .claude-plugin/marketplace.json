@@ -1,0 +1,14 @@
+{
+  "name": "unbot-voice",
+  "description": "unbot-voice: find and fix what makes writing sound like AI. Claude skill, CLI, GitHub Action and browser playground.",
+  "owner": {
+    "name": "iamazizhaider"
+  },
+  "plugins": [
+    {
+      "name": "unbot-voice",
+      "source": "./",
+      "description": "Rewrite, audit, or write prose so it reads like a person wrote it, not a chatbot."
+    }
+  ]
+}

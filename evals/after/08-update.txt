@@ -1,0 +1,7 @@
+Hi team,
+
+Q3 migration update. The database move finished on Tuesday and we haven't found any missing records. API changes are in testing and should ship on the 14th as planned.
+
+The frontend redesign is about a week behind because the auth library we depend on changed its session handling. That week was already in our buffer, so the October 30 launch date doesn't move.
+
+Questions to me or Priya.

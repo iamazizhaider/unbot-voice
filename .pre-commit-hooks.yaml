@@ -1,0 +1,6 @@
+- id: unbot-voice
+  name: unbot-voice (AI writing tells)
+  description: Fail if a Markdown or text file reads like unedited AI output.
+  entry: skills/unbot-voice/scripts/scan.py --threshold 25
+  language: script
+  types_or: [markdown, plain-text]

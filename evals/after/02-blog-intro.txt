@@ -1,0 +1,3 @@
+Most remote teams I've worked with don't have a productivity problem. They have a "nobody knows what anyone else is doing" problem, and people try to fix it with more meetings, which makes everyone tired.
+
+This post covers what worked for the three teams I've managed since 2021: written weekly updates instead of standups, two hours of shared overlap a day, and a rule that a decision isn't made until it's written down somewhere searchable. None of it needs new software.

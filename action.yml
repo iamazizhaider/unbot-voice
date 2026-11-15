@@ -1,0 +1,69 @@
+name: "unbot-voice: AI writing check"
+description: "Flag signs of AI-generated writing (stock phrases, inflated significance, chatbot residue) in docs and prose."
+author: "iamazizhaider"
+branding:
+  icon: "edit-3"
+  color: "gray-dark"
+
+inputs:
+  files:
+    description: "Space-separated globs of files to scan. ** is supported."
+    default: "**/*.md"
+  threshold:
+    description: "Fail if any file scores above this many tells per 1,000 words. Leave empty to only report."
+    default: "25"
+  min-words:
+    description: "Files shorter than this never fail the check (short files give noisy scores)."
+    default: "50"
+  include-quotes:
+    description: "Also scan text inside short quotes and inline code (by default these are treated as mentions)."
+    default: "false"
+
+outputs:
+  failed:
+    description: "\"true\" if any file scored above the threshold."
+    value: ${{ steps.scan.outputs.failed }}
+
+runs:
+  using: "composite"
+  steps:
+    - id: scan
+      shell: bash
+      env:
+        UNBOT_FILES: ${{ inputs.files }}
+        UNBOT_THRESHOLD: ${{ inputs.threshold }}
+        UNBOT_MIN_WORDS: ${{ inputs.min-words }}
+        UNBOT_INCLUDE_QUOTES: ${{ inputs.include-quotes }}
+      run: |
+        shopt -s globstar nullglob
+        files=()
+        for pattern in $UNBOT_FILES; do
+          for f in $pattern; do
+            [[ -f "$f" && "$f" != node_modules/* && "$f" != .git/* ]] && files+=("$f")
+          done
+        done
+        if [ ${#files[@]} -eq 0 ]; then
+          echo "unbot-voice: no files matched '$UNBOT_FILES'"
+          echo "failed=false" >> "$GITHUB_OUTPUT"
+          exit 0
+        fi
+        scan="$GITHUB_ACTION_PATH/skills/unbot-voice/scripts/scan.py"
+        report_args=()
+        [ "$UNBOT_INCLUDE_QUOTES" = "true" ] && report_args+=(--include-quotes)
+        args=("${report_args[@]}" --min-words "$UNBOT_MIN_WORDS")
+        [ -n "$UNBOT_THRESHOLD" ] && args+=(--threshold "$UNBOT_THRESHOLD")
+
+        {
+          echo "## unbot-voice report"
+          echo
+          echo '```'
+          python3 "$scan" "${files[@]}" "${report_args[@]}" || true
+          echo '```'
+        } >> "$GITHUB_STEP_SUMMARY"
+
+        set +e
+        python3 "$scan" "${files[@]}" "${args[@]}" --format github
+        status=$?
+        set -e
+        if [ $status -eq 1 ]; then echo "failed=true" >> "$GITHUB_OUTPUT"; else echo "failed=false" >> "$GITHUB_OUTPUT"; fi
+        exit $status

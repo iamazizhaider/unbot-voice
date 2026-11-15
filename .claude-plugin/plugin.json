@@ -1,0 +1,10 @@
+{
+  "name": "unbot-voice",
+  "version": "1.0.0",
+  "description": "Rewrite, audit, or write prose so it reads like a person wrote it, not a chatbot. Includes a catalog of AI writing tells and a pattern scanner.",
+  "author": { "name": "iamazizhaider" },
+  "homepage": "https://github.com/iamazizhaider/unbot-voice",
+  "repository": "https://github.com/iamazizhaider/unbot-voice",
+  "license": "MIT",
+  "keywords": ["writing", "editing", "ai-detection", "style", "humanize"]
+}
