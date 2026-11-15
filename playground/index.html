@@ -385,14 +385,19 @@ mark.flash { box-shadow: 0 0 0 3px var(--focus); }
     // diff() returns null for very large rewrites; then show the clean text without marks.
     const parts = UnbotFix.diff(input.value.trim(), fixed.text) || [["=", fixed.text]];
     const marked = parts.length > 1 || parts[0][0] !== "=";
-    $("show-changes").parentElement.hidden = !marked;
     const changes = fixed.text !== input.value.trim();
+    const rest = fixed.result.hits;
+    // With nothing changed, the change toggle and "Use as draft" do nothing, so hide them.
+    $("show-changes").parentElement.hidden = !marked || !changes;
+    $("use-fixed").hidden = !changes;
     $("fixed-sum").innerHTML = changes
       ? `Score <b>${fmt(before)}</b> → <b>${fmt(after)}</b> · ${fixed.result.band.text}`
-      : "No mechanical fixes to make here.";
+      : rest.length
+        ? `Nothing here can be fixed automatically. The ${rest.length === 1 ? "issue" : `<b>${rest.length}</b> issues`} below need${rest.length === 1 ? "s" : ""} a rewrite.`
+        : "Nothing to fix. No known patterns found.";
+    if (!changes && rest.length) left.open = true;
     box.innerHTML = parts.map(([op, s]) => op === "=" ? esc(s) : op === "+" ? `<ins>${esc(s)}</ins>` : `<del>${esc(s)}</del>`).join("");
     box.classList.toggle("clean", !$("show-changes").checked);
-    const rest = fixed.result.hits;
     left.hidden = rest.length === 0;
     left.querySelector("summary").innerHTML = `<b>${rest.length}</b> left for you to fix`;
     $("left-list").innerHTML = rest.map((h) =>
