@@ -67,3 +67,24 @@ class Behaviour(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class Site(unittest.TestCase):
+    def test_generated_pages_are_current(self):
+        r = subprocess.run([sys.executable, os.path.join(ROOT, "tools", "build_site.py"), "--check"],
+                           capture_output=True, text=True)
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+
+    def test_playground_faq_matches_structured_data(self):
+        import html
+        import json
+        import re
+        page = read(os.path.join(ROOT, "playground", "index.html"))
+        blocks = [json.loads(b) for b in re.findall(r'<script type="application/ld\+json">(.*?)</script>', page, re.S)]
+        faq = next(x for b in blocks for x in (b if isinstance(b, list) else [b]) if x["@type"] == "FAQPage")
+        section = page[page.index('<section class="faq"'):]
+        section = section[:section.index("</section>")]
+        visible = [(html.unescape(q), html.unescape(a)) for q, a in
+                   re.findall(r"<summary>(.*?)</summary>\s*<p>(.*?)</p>", section, re.S)]
+        self.assertEqual(len(visible), 6)
+        self.assertEqual([(e["name"], e["acceptedAnswer"]["text"]) for e in faq["mainEntity"]], visible)

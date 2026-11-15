@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Signs of AI writing: how to spot it and how to fix it</title>
+<meta name="description" content="A field guide to the signs of AI-generated writing: stock phrases, inflated significance, AI vocabulary by year, em dashes and chatbot leftovers, with a fix for each. Includes a free checker that flags 31 patterns in your own text.">
+<link rel="canonical" href="https://iamazizhaider.github.io/unbot-voice/signs-of-ai-writing/">
+<meta name="theme-color" content="#f7f6f3">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="unbot-voice">
+<meta property="og:title" content="Signs of AI writing: how to spot it and how to fix it">
+<meta property="og:description" content="A field guide to the signs of AI-generated writing: stock phrases, inflated significance, AI vocabulary by year, em dashes and chatbot leftovers, with a fix for each. Includes a free checker that flags 31 patterns in your own text.">
+<meta property="og:url" content="https://iamazizhaider.github.io/unbot-voice/signs-of-ai-writing/">
+<meta property="og:image" content="https://iamazizhaider.github.io/unbot-voice/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="unbot-voice: find and fix what makes writing sound like AI">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23161616'/><path d='M9 10v7a7 7 0 0 0 14 0v-7' stroke='%23fff' stroke-width='3.2' fill='none' stroke-linecap='round'/></svg>">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Signs of AI writing: how to spot it and how to fix it", "description": "A field guide to the signs of AI-generated writing: stock phrases, inflated significance, AI vocabulary by year, em dashes and chatbot leftovers, with a fix for each. Includes a free checker that flags 31 patterns in your own text.", "url": "https://iamazizhaider.github.io/unbot-voice/signs-of-ai-writing/", "image": "https://iamazizhaider.github.io/unbot-voice/assets/og.png", "inLanguage": "en", "author": {"@type": "Person", "name": "iamazizhaider", "url": "https://github.com/iamazizhaider"}, "license": "https://creativecommons.org/licenses/by-sa/4.0/", "isBasedOn": ["https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing", "https://huntingthemuse.net/library/how-to-tell-if-writing-is-ai"], "about": "Signs of AI-generated writing"}</script>
+<style>:root { --bg:#f7f6f3; --surface:#fff; --surface-2:#f1efea; --text:#1b1a17; --muted:#6b675f; --border:#e3e0d8; --focus:#2f5bd3; --accent:#c2410c; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#121211; --surface:#1b1b19; --surface-2:#232320; --text:#ecebe6; --muted:#a29e94; --border:#2f2e2a; --focus:#7aa2ff; --accent:#fb923c; } }
+:root[data-theme="dark"] { --bg:#121211; --surface:#1b1b19; --surface-2:#232320; --text:#ecebe6; --muted:#a29e94; --border:#2f2e2a; --focus:#7aa2ff; --accent:#fb923c; }
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin:0; background:var(--bg); color:var(--text); font:17px/1.65 ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; }
+a { color: inherit; text-underline-offset: 3px; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.wrap { max-width: 760px; margin: 0 auto; padding: 0 max(16px, env(safe-area-inset-right)) 48px max(16px, env(safe-area-inset-left)); }
+header.top { display:flex; align-items:center; justify-content:space-between; padding:20px 0 8px; gap:12px; }
+.brand { display:flex; align-items:center; gap:10px; font-weight:700; font-size:18px; text-decoration:none; }
+.brand-mark { width:28px; height:28px; border-radius:7px; background:var(--text); color:var(--bg); display:grid; place-items:center; }
+.ghost { border:1px solid var(--border); border-radius:8px; padding:6px 10px; font-size:14px; text-decoration:none; }
+.ghost:hover { background: var(--surface-2); }
+h1 { font-size: clamp(30px, 5vw, 44px); line-height:1.1; letter-spacing:-.025em; margin:28px 0 12px; }
+h2 { font-size: 26px; letter-spacing:-.015em; margin: 44px 0 8px; padding-top: 20px; border-top: 1px solid var(--border); }
+h3 { font-size: 19px; margin: 28px 0 4px; }
+p, li { overflow-wrap: anywhere; }
+.lede { font-size: 19px; color: var(--muted); }
+.answer { background: var(--surface); border:1px solid var(--border); border-radius:14px; padding: 16px 20px; margin: 20px 0; }
+.answer p { margin: 0 0 8px; } .answer ol { margin: 0 0 10px; padding-left: 22px; }
+.cta { display:inline-block; background:var(--text); color:var(--bg); border-radius:10px; padding:10px 16px; font-weight:600; text-decoration:none; margin: 4px 0 8px; }
+nav.toc { font-size: 15px; color: var(--muted); }
+nav.toc ol { padding-left: 22px; margin: 6px 0 0; }
+code { font: 14px ui-monospace,SFMono-Regular,Menlo,monospace; background: var(--surface-2); padding: 1px 5px; border-radius: 5px; }
+em { font-style: italic; }
+@media (max-width: 360px) { header.top { gap: 8px; } .brand { font-size: 16px; gap: 8px; } .ghost { padding: 5px 7px; } }
+footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--border); color: var(--muted); font-size: 14px; }</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <a class="brand" href="../playground/"><span class="brand-mark" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 32 32"><path d="M8 7v10a8 8 0 0 0 16 0V7" stroke="currentColor" stroke-width="4" fill="none" stroke-linecap="round"/></svg></span>unbot-voice</a>
+  <nav style="display:flex;gap:6px"><a class="ghost" href="../playground/">Playground</a><a class="ghost" href="https://github.com/iamazizhaider/unbot-voice">GitHub</a></nav>
+</header>
+<main>
+<article>
+<h1>Signs of AI writing</h1>
+<p class="lede">A field guide to the phrases and habits that make text read like it came from ChatGPT, Claude or Gemini, with a fix for each one. Last updated November 2026.</p>
+<div class="answer">
+<p><strong>The short answer.</strong> The strongest signs of AI writing are:</p>
+<ol>
+<li>Chatbot leftovers such as "I hope this helps", "[Your Name]" or "As an AI".</li>
+<li>Claims of importance in place of facts: "plays a pivotal role", "a testament to".</li>
+<li>Stock drama such as "Here's the thing:" and "The result?"</li>
+<li>Words that spiked with each model era: "delve" and "tapestry" in 2023, "showcasing" and "fostering" in 2024–25, "quietly" and "steady" in 2026.</li>
+<li>"It's not X, it's Y" and lists of exactly three.</li>
+<li>Formatting habits: em dashes, emoji bullets, bold labels, and a closing "In conclusion".</li>
+</ol>
+<p>One sign proves nothing, because people write this way too. A cluster of them is what gives a draft away.</p>
+</div>
+<p><a class="cta" href="../playground/">Check your own text</a><br><span style="color:var(--muted);font-size:15px">Free and open source. It runs in your browser, so nothing you paste is uploaded.</span></p>
+
+<nav class="toc" aria-label="Contents"><strong>Contents</strong><ol><li><a href="#content-patterns">Content patterns</a></li><li><a href="#language-and-grammar">Language and grammar</a></li><li><a href="#forced-voice-and-stock-framing-hunting-the-muse">Forced voice and stock framing (Hunting the Muse)</a></li><li><a href="#style-and-formatting">Style and formatting</a></li><li><a href="#chatbot-residue">Chatbot residue</a></li><li><a href="#what-human-writing-tends-to-have">What human writing tends to have</a></li><li><a href="#not-reliable-on-their-own">Not reliable on their own</a></li></ol></nav>
+<h2 id="content-patterns">Content patterns</h2>
+<h3 id="regression-to-the-mean">Regression to the mean</h3>
+<p>Specific facts get replaced with generic, flattering significance.</p>
+<ul><li>Before: "inventor of the first train-coupling device"</li><li>After (AI): "a revolutionary titan of industry"</li><li><strong>Fix:</strong> restore the concrete fact. If there isn't one, cut the claim.</li></ul>
+<h3 id="inflated-significance-legacy-and-trends">Inflated significance, legacy and trends</h3>
+<p>Watch for: <em>stands as / serves as</em>, <em>is a testament / reminder</em>, <em>a crucial / pivotal / vital / significant / key role / moment</em>, <em>underscores its importance</em>, <em>setting the stage for</em>, <em>key turning point</em>, <em>indelible mark</em>, <em>has shaped conversations / discussions / debate about</em>.</p>
+<ul><li><strong>Fix:</strong> say what happened. Let readers judge significance.</li></ul>
+<h3 id="notability-and-media-coverage-padding">Notability and media-coverage padding</h3>
+<p>Watch for: <em>independent coverage</em>, <em>regional media outlets</em>, <em>cited / featured / profiled in</em>. The text lists where something was covered instead of what was said.</p>
+<ul><li><strong>Fix:</strong> report the substance, or drop the line.</li></ul>
+<h3 id="over-reliance-on-directories-and-profiles">Over-reliance on directories and profiles</h3>
+<p>Watch for: <em>is listed in</em>, <em>identifies / describes ... as</em>, <em>professional profile lists</em>, <em>maintains an active social media presence</em>.</p>
+<h3 id="superficial-ing-analysis">Superficial "-ing" analysis</h3>
+<p>A trailing participle clause adds fake insight: <em>highlighting</em>, <em>underscoring</em>, <em>emphasizing</em>, <em>ensuring</em>, <em>reflecting</em>, <em>symbolizing</em>, <em>contributing to</em>, <em>fostering</em>, <em>enhancing</em>, <em>valuable insights</em>, <em>aligns / resonates with</em>.</p>
+<ul><li>Example: "The festival draws 10,000 visitors, highlighting the town's vibrant cultural scene."</li><li><strong>Fix:</strong> "The festival draws 10,000 visitors." Stop there.</li></ul>
+<h3 id="vague-connection">Vague connection</h3>
+<p>Watch for: <em>in connection with</em>, <em>connected to</em>, <em>associated with</em>, <em>particularly / widely associated</em>. The writer is hiding that they don't know the actual relationship.</p>
+<h3 id="weasel-attributions">Weasel attributions</h3>
+<p>Watch for: <em>Industry reports</em>, <em>Observers have cited</em>, <em>Experts argue</em>, <em>Some critics argue</em>, <em>several sources</em> (when one is cited), and <em>such as</em> in front of a vague list.</p>
+<ul><li><strong>Fix:</strong> name the source or cut the claim.</li></ul>
+<h3 id="formulaic-challenges-and-legacy-endings">Formulaic challenges and legacy endings</h3>
+<p>The pattern runs "Despite its X, [subject] faces challenges...", then "Despite these challenges...", often under headings like "Challenges and Legacy", "Future Outlook" or "Awards and Recognition".</p>
+<ul><li><strong>Fix:</strong> delete the paragraph unless the challenges are specific and sourced.</li></ul>
+<h3 id="hedging-disclaimers-and-corrective-framing">Hedging disclaimers and corrective framing</h3>
+<ul><li>2023–24: <em>it's important to note</em>, <em>it's worth noting</em>, unsolicited safety or legal caveats.</li><li>2024–25: <em>not publicly available</em>, <em>maintains a low profile</em>, used to justify speculation.</li><li>2026: <em>X rather than Y</em>, <em>does not by itself establish</em>, <em>should not be confused with</em>, <em>while specific details are limited</em>, <em>based on available information</em>.</li></ul>
+<h2 id="language-and-grammar">Language and grammar</h2>
+<h3 id="ai-vocabulary-by-era">AI vocabulary by era</h3>
+<p>One word is fine. A cluster is the tell.</p>
+<ul><li><strong>2023–mid-2024:</strong> additionally, boasts, bolstered, crucial, delve, emphasizing, enduring, garner, intricate, interplay, landscape, meticulously, pivotal, underscore, tapestry, testament, valuable, vibrant</li><li><strong>Mid-2024–mid-2025:</strong> align with, enhance, fostering, highlighting, showcasing</li><li><strong>Mid-2025–mid-2026:</strong> emphasizing, enhance, highlighting, showcasing</li><li><strong>Mid-2026 onward:</strong> challenge, clearer, dependable, echoed, foster, leverage, matters, multifaceted, practical, prioritize, quietly, steady, universally (plus a uniform 8–20-word sentence cadence with lots of periods and commas)</li><li><strong>Grok-flavored:</strong> causal, empirical, correlate, underscore</li><li><strong>Marketing and LinkedIn:</strong> unlock, empower, elevate, navigate (and journey or navigation metaphors), grounded, game-changer, seamless, robust, cutting-edge, transformative, holistic, synergy</li><li><strong>Use only when literally needed:</strong> crucial, significant, important, critical, leverage, foster</li></ul>
+<h3 id="promotional-or-travel-brochure-tone-mostly-2023-25">Promotional or travel-brochure tone (mostly 2023–25)</h3>
+<p><em>boasts a</em>, <em>vibrant</em>, <em>rich (heritage / history)</em>, <em>profound</em>, <em>showcasing</em>, <em>nestled</em>, <em>in the heart of</em>, <em>groundbreaking</em>, <em>renowned</em>, <em>diverse array</em>, <em>breathtaking</em>, <em>must-visit</em>.</p>
+<h3 id="copula-avoidance">Copula avoidance</h3>
+<p>AI replaces "is / are / has" with <em>serves as</em>, <em>stands as</em>, <em>marks</em>, <em>functions as</em>, <em>represents</em>, <em>boasts</em>, <em>features</em>, <em>maintains</em>, <em>offers</em>, <em>refers to</em>. Use of "is/are" in academic writing dropped more than 10% after 2023.</p>
+<ul><li><strong>Fix:</strong> write "is". Write "has".</li></ul>
+<h3 id="negative-parallelism">Negative parallelism</h3>
+<ul><li><em>Not only X but also Y</em> / <em>It's not just X, it's Y</em></li><li><em>It's not X, it's Y</em> / <em>Not X, but Y</em></li><li><em>No X. No Y. Just Z.</em></li><li><em>Y rather than X</em> (common in 2026)</li><li><strong>Fix:</strong> state Y.</li></ul>
+<h3 id="rule-of-three">Rule of three</h3>
+<p>"adjective, adjective, adjective" or "short phrase, short phrase, and short phrase", used to make thin analysis look complete.</p>
+<ul><li><strong>Fix:</strong> keep only the items that matter.</li></ul>
+<h3 id="elegant-variation">Elegant variation</h3>
+<p>Cycling synonyms for the same thing ("the regime", "the Soviet government", "the authorities") to avoid repetition.</p>
+<ul><li><strong>Fix:</strong> pick one name and reuse it.</li></ul>
+<h3 id="stiff-synonyms-for-plain-words">Stiff synonyms for plain words</h3>
+<p><em>authored</em> (wrote), <em>passed away</em> (died), <em>utilize</em> (use), <em>commence</em> (start), <em>facilitate</em> (help), <em>individuals</em> (people), <em>in order to</em> is fine, and humans use it a lot.</p>
+<h2 id="forced-voice-and-stock-framing-hunting-the-muse">Forced voice and stock framing (Hunting the Muse)</h2>
+<h3 id="manufactured-drama-and-sass">Manufactured drama and sass</h3>
+<p><em>But here's the thing:</em>, <em>Here's the deal</em>, <em>Here's why that matters</em>, <em>Then I realized:</em>, <em>The result?</em>, <em>Hot take:</em>, <em>And honestly?</em>, <em>Let that sink in.</em>, <em>That's the real unlock.</em>, <em>Read that again.</em></p>
+<ul><li><strong>Fix:</strong> usually just "But", or nothing.</li></ul>
+<h3 id="stock-openers-and-clich-s">Stock openers and clichés</h3>
+<p><em>In today's fast-paced digital landscape</em>, <em>In the dynamic world of...</em>, <em>As the world continues to evolve...</em>, <em>In an era where...</em>, <em>Shouting into the void</em>, <em>No fluff</em>, <em>looming challenges</em>, <em>understanding the advantages and disadvantages</em>, <em>double-edged sword</em>, <em>to new heights</em>, <em>will never be the same</em>, <em>redefines the way</em>, <em>unlock your full potential</em>, <em>more than just a</em>, <em>has never been more crucial</em>, <em>the key lies in</em>, <em>warrants careful consideration</em>, <em>unprecedented opportunities</em>.</p>
+<h3 id="email-boilerplate">Email boilerplate</h3>
+<p><em>I hope this email finds you well</em>, <em>I wanted to reach out</em>, <em>I wanted to provide a quick update</em>, <em>was truly impressed by</em>, <em>forward-thinking companies like yours</em>, <em>support your journey</em>.</p>
+<h3 id="audience-straddling-and-both-sides-framing">Audience-straddling and both-sides framing</h3>
+<p><em>Whether you're a seasoned pro or just starting out...</em>, <em>On one hand... on the other hand...</em>, which hedges in place of a position.</p>
+<h3 id="formulaic-titles">Formulaic titles</h3>
+<p><em>From X to Y</em>, <em>Master X in N Days</em>, <em>The Ultimate Guide to X</em>, <em>Unlocking the Power of X</em>, <em>X: A Deep Dive</em>.</p>
+<h2 id="style-and-formatting">Style and formatting</h2>
+<ul><li><strong>Em dashes:</strong> used heavily for asides where a comma, parenthesis or colon fits better, sometimes spaced " — ". Overcorrecting is a newer tell too: some tuned models now avoid all varied punctuation.</li><li><strong>Bold overuse</strong> inside prose.</li><li><strong>Inline-header lists:</strong> "<strong>Label:</strong> explanation" bullets everywhere.</li><li><strong>Bullets where prose belongs</strong>, and sudden lists mid-argument.</li><li><strong>Title Case Headings</strong> where the venue uses sentence case.</li><li><strong>Emoji</strong> at the start of headings or bullets (🚀 ✅ 💡).</li><li><strong>Curly quotes</strong> in plain-text venues.</li><li><strong>Markdown leaking</strong> into non-markdown places: <code>**</code>, <code>#</code>, <code>---</code>, <code>[text](url)</code>, code fences.</li><li><strong>Summary closers:</strong> <em>In summary</em>, <em>In conclusion</em>, <em>Overall</em>, <em>Ultimately</em>, and a recap of every paragraph's point.</li><li><strong>"X and Y" section headings</strong> ("History and Development", "Challenges and Legacy").</li></ul>
+<h2 id="chatbot-residue">Chatbot residue</h2>
+<ul><li>Pleasantries: <em>Certainly!</em>, <em>Great question!</em>, <em>I hope this helps</em>, <em>Absolutely</em>, <em>Happy to help</em></li><li>Offers: <em>Would you like me to...</em>, <em>Let me know if...</em>, <em>Here is a...</em>, <em>Feel free to...</em></li><li>Self-reference: <em>As a large language model</em>, <em>As an AI</em>, <em>As of my last knowledge update</em>, <em>up to my last training update</em></li><li>Instructions to the user left in the text: <em>Delete this section before submitting</em></li><li>Placeholders: <em>[Your Name]</em>, <em>[Company]</em>, <em>2025-XX-XX</em>, <em>INSERT_SOURCE_URL</em>, <em>example.com</em></li><li>Tool artifacts: <em>contentReference[oaicite:0]</em>, <em>utm_source=chatgpt.com</em>, stray <em>↩</em></li><li>Abrupt cut-offs mid-sentence</li></ul>
+<h2 id="what-human-writing-tends-to-have">What human writing tends to have</h2>
+<ul><li>Simple <em>is / has / there is</em> constructions</li><li>Plain verbs: <em>wrote</em>, <em>died</em>, <em>used</em>, <em>said</em></li><li>Committed superlatives: <em>one of the best</em>, <em>was the first</em></li><li>Selective qualifiers and intensifiers: <em>very</em>, <em>perhaps</em>, <em>tends to</em>, <em>kind of</em></li><li>Some wordiness and imperfection: <em>in order to</em>, <em>the fact that</em></li><li>Consistent naming, with no synonym rotation</li><li>Uneven rhythm, digressions, and opinions the writer can defend</li><li>Specifics only the writer would know: names, numbers, dates, what actually happened</li><li>The ability to explain why each choice was made</li></ul>
+<h2 id="not-reliable-on-their-own">Not reliable on their own</h2>
+<p>Perfect grammar, mixed registers, bland or fancy prose, transition words alone (<em>additionally</em>, <em>consequently</em>, <em>notably</em>), unsourced claims. AI detectors such as GPTZero and Pangram have non-trivial error rates, and humans detect AI at close to chance (about 57–64% in one study). Never present an audit as proof.</p>
+</article>
+</main>
+<footer>
+<p>Adapted from Wikipedia's <a href="https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing">Signs of AI writing</a> and Hunting the Muse's <a href="https://huntingthemuse.net/library/how-to-tell-if-writing-is-ai">How to tell if writing is AI</a>. This page is licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>. The source is <a href="https://github.com/iamazizhaider/unbot-voice/blob/main/skills/unbot-voice/references/patterns.md">patterns.md</a> on GitHub.</p>
+<p><a href="../playground/">Playground</a> · <a href="https://github.com/iamazizhaider/unbot-voice">GitHub</a> · <a href="https://github.com/iamazizhaider/unbot-voice#install">Install the Claude skill</a></p>
+</footer>
+</div>
+</body>
+</html>

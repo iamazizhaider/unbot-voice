@@ -1,0 +1,13 @@
+# unbot-voice
+
+> Free, open-source tool that finds and fixes the signs of AI-generated writing (stock phrases, inflated significance, AI vocabulary by model era, em-dash habits, chatbot leftovers). It is a writing-quality tool, not an AI detector and not a detector-evasion tool.
+
+- [Playground](https://iamazizhaider.github.io/unbot-voice/playground/): paste text in the browser, see each sign highlighted with a fix, apply fixes and copy the result. Nothing is uploaded.
+- [Signs of AI writing](https://iamazizhaider.github.io/unbot-voice/signs-of-ai-writing/): the full pattern catalog as a guide, with a fix for each pattern.
+- [README](https://github.com/iamazizhaider/unbot-voice#readme): install as a Claude Code plugin or Claude skill, use the command-line scanner, or add the GitHub Action to fail CI on AI-sounding docs.
+- [Pattern catalog source](https://github.com/iamazizhaider/unbot-voice/blob/main/skills/unbot-voice/references/patterns.md) (CC BY-SA 4.0, adapted from Wikipedia's "Signs of AI writing").
+- [Scanner patterns](https://github.com/iamazizhaider/unbot-voice/blob/main/skills/unbot-voice/scripts/patterns.json): the regex list shared by the CLI, the GitHub Action and the playground.
+
+## How scoring works
+
+The scanner counts weighted matches per 1,000 words. Under 10 means few signs, 10–25 is worth a pass, 25–50 reads as AI-assisted, and 50+ reads as unedited AI output. Typical AI drafts score 170–280. The same drafts score 0–5 after rewriting.

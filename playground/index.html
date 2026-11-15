@@ -3,10 +3,21 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>unbot-voice playground</title>
-<meta name="description" content="Paste your writing and see which phrases make it read like AI. Runs in your browser; nothing is uploaded.">
+<title>Does this sound like AI? Free AI writing checker and fixer | unbot-voice</title>
+<meta name="description" content="Paste your writing to see which phrases make it sound AI-generated, with a fix for each. Apply the fixes and copy the final text. Free and open source. Runs in your browser, so nothing is uploaded.">
+<link rel="canonical" href="https://iamazizhaider.github.io/unbot-voice/playground/">
+<meta name="theme-color" content="#f7f6f3">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="unbot-voice">
 <meta property="og:title" content="unbot-voice: what makes your writing sound like AI?">
 <meta property="og:description" content="Paste a draft and see the tells highlighted, with a fix for each. Free, open source, runs in your browser.">
+<meta property="og:url" content="https://iamazizhaider.github.io/unbot-voice/playground/">
+<meta property="og:image" content="https://iamazizhaider.github.io/unbot-voice/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="unbot-voice: find and fix what makes writing sound like AI">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">[{"@context": "https://schema.org", "@type": "WebApplication", "name": "unbot-voice", "url": "https://iamazizhaider.github.io/unbot-voice/playground/", "description": "Free AI writing checker and fixer. Highlights the phrases and habits that make text read like AI, with a fix for each, and runs entirely in the browser.", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Any (web browser)", "browserRequirements": "Requires JavaScript", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "isAccessibleForFree": true, "license": "https://opensource.org/licenses/MIT", "codeRepository": "https://github.com/iamazizhaider/unbot-voice", "image": "https://iamazizhaider.github.io/unbot-voice/assets/og.png", "author": {"@type": "Person", "name": "iamazizhaider", "url": "https://github.com/iamazizhaider"}}, {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How can I tell if writing is AI-generated?", "acceptedAnswer": {"@type": "Answer", "text": "Look for clusters, not single words. The strongest signs are chatbot leftovers (\"I hope this helps\", \"[Your Name]\"), claims of importance in place of facts (\"plays a pivotal role\"), stock drama (\"Here's the thing:\"), words that spiked with each model era (\"delve\", \"showcasing\", \"quietly\"), \"it's not X, it's Y\", and heavy em dashes or emoji bullets. Paste your text above and each one is marked."}}, {"@type": "Question", "name": "What words does AI use too much?", "acceptedAnswer": {"@type": "Answer", "text": "It depends on the model era. 2023–24 models overused \"delve\", \"tapestry\", \"testament\", \"pivotal\" and \"intricate\". 2024–25 models overused \"showcasing\", \"fostering\" and \"enhance\". In 2026 the tells are quieter: \"quietly\", \"steady\", \"practical\", \"prioritize\", \"matters\". One of these is fine. Several in one paragraph is the giveaway."}}, {"@type": "Question", "name": "How do I make AI writing sound more human?", "acceptedAnswer": {"@type": "Answer", "text": "Replace general claims with specifics only you know: names, numbers, dates, what actually happened. Cut the setup phrases and say the point. Use plain verbs like \"is\" and \"has\". Drop the closing summary. This page applies the mechanical fixes for you. The facts have to come from you."}}, {"@type": "Question", "name": "Is unbot-voice an AI detector?", "acceptedAnswer": {"@type": "Answer", "text": "No. It shows the habits that make writing read as AI so you can fix them. People write this way too, and AI detectors get it wrong often, so a high score is a reason to edit, not proof of anything."}}, {"@type": "Question", "name": "Is my text uploaded or stored?", "acceptedAnswer": {"@type": "Answer", "text": "No. The scanner and the fixes run in your browser. Your draft is saved only in your own browser so a reload doesn't lose it."}}, {"@type": "Question", "name": "Why do em dashes make writing look like AI?", "acceptedAnswer": {"@type": "Answer", "text": "Chat models used em dashes for asides far more often than most people do, so a draft full of them stands out. A comma, colon or full stop usually works better. Newer models were tuned to avoid them, so their absence proves nothing either."}}]}]</script>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23161616'/><path d='M9 10v7a7 7 0 0 0 14 0v-7' stroke='%23fff' stroke-width='3.2' fill='none' stroke-linecap='round'/><circle cx='16' cy='25.5' r='0' fill='%23fff'/></svg>">
 <style>
 :root {
@@ -161,11 +172,17 @@ mark.flash { box-shadow: 0 0 0 3px var(--focus); }
 .dot.c-content { background: var(--c-content); } .dot.c-language { background: var(--c-language); }
 .dot.c-style { background: var(--c-style); }
 
-.below { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; padding: 8px 0 48px; border-top: 1px solid var(--border); }
+.below { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; padding: 8px 0 32px; border-top: 1px solid var(--border); }
 @media (max-width: 880px) { .below { grid-template-columns: 1fr; } }
 .below h2 { font-size: 15px; margin: 22px 0 6px; }
 .below p { margin: 0; color: var(--muted); font-size: 15px; }
 .below code { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; background: var(--surface-2); padding: 1px 5px; border-radius: 5px; }
+.faq { padding: 4px 0 56px; border-top: 1px solid var(--border); max-width: 760px; }
+.faq h2 { font-size: 22px; margin: 26px 0 10px; letter-spacing: -.01em; }
+.faq details { border-bottom: 1px solid var(--border); }
+.faq summary { cursor: pointer; padding: 12px 0; font-weight: 600; }
+.faq details p { margin: 0 0 14px; color: var(--muted); }
+.faq-more { color: var(--muted); font-size: 15px; margin-top: 18px; }
 .err { padding: 14px 16px; color: var(--very-high); font-size: 14px; }
 
 /* Fixed tab */
@@ -255,6 +272,10 @@ mark.flash { box-shadow: 0 0 0 3px var(--focus); }
 }
 @media (max-width: 360px) {
   .tabs button { padding: 5px 8px; font-size: 13px; }
+  header.top { gap: 8px; }
+  .brand { font-size: 16px; gap: 8px; }
+  .top nav { gap: 4px; }
+  .top nav .ghost { padding: 5px 7px; }
   .samples > span { display: none; }
 }
 </style>
@@ -267,6 +288,7 @@ mark.flash { box-shadow: 0 0 0 3px var(--focus); }
     </span>unbot-voice</a>
     <nav>
       <button class="ghost" id="theme" type="button" aria-label="Toggle dark mode">◐</button>
+      <a class="ghost" href="../signs-of-ai-writing/">Guide</a>
       <a class="ghost" href="https://github.com/iamazizhaider/unbot-voice">GitHub</a>
     </nav>
   </header>
@@ -353,12 +375,41 @@ mark.flash { box-shadow: 0 0 0 3px var(--focus); }
     </div>
     <div>
       <h2>Where the patterns come from</h2>
-      <p>Wikipedia's <a href="https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing">Signs of AI writing</a> guide and Hunting the Muse's <a href="https://huntingthemuse.net/library/how-to-tell-if-writing-is-ai">How to tell if writing is AI</a>, with vocabulary lists dated by model era. Inspired by <a href="https://github.com/blader/humanizer">blader/humanizer</a>.</p>
+      <p>Wikipedia's <a href="https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing">Signs of AI writing</a> guide and Hunting the Muse's <a href="https://huntingthemuse.net/library/how-to-tell-if-writing-is-ai">How to tell if writing is AI</a>, with vocabulary lists dated by model era. The full list is in <a href="../signs-of-ai-writing/">Signs of AI writing</a>. Inspired by <a href="https://github.com/blader/humanizer">blader/humanizer</a>.</p>
     </div>
     <div>
       <h2>Fix it, not just find it</h2>
       <p>Click any highlight to fix it in your text, then copy the final version. The Fixed tab does all the mechanical fixes at once: filler, stiff words, em dashes, emoji bullets. For the rest, install it as a Claude skill and it rewrites your drafts properly. It can also learn your voice from a few samples. Setup is on <a href="https://github.com/iamazizhaider/unbot-voice">GitHub</a>.</p>
     </div>
+  </section>
+
+  <section class="faq" aria-labelledby="faq-title">
+    <h2 id="faq-title">Questions</h2>
+    <details>
+      <summary>How can I tell if writing is AI-generated?</summary>
+      <p>Look for clusters, not single words. The strongest signs are chatbot leftovers ("I hope this helps", "[Your Name]"), claims of importance in place of facts ("plays a pivotal role"), stock drama ("Here's the thing:"), words that spiked with each model era ("delve", "showcasing", "quietly"), "it's not X, it's Y", and heavy em dashes or emoji bullets. Paste your text above and each one is marked.</p>
+    </details>
+    <details>
+      <summary>What words does AI use too much?</summary>
+      <p>It depends on the model era. 2023–24 models overused "delve", "tapestry", "testament", "pivotal" and "intricate". 2024–25 models overused "showcasing", "fostering" and "enhance". In 2026 the tells are quieter: "quietly", "steady", "practical", "prioritize", "matters". One of these is fine. Several in one paragraph is the giveaway.</p>
+    </details>
+    <details>
+      <summary>How do I make AI writing sound more human?</summary>
+      <p>Replace general claims with specifics only you know: names, numbers, dates, what actually happened. Cut the setup phrases and say the point. Use plain verbs like "is" and "has". Drop the closing summary. This page applies the mechanical fixes for you. The facts have to come from you.</p>
+    </details>
+    <details>
+      <summary>Is unbot-voice an AI detector?</summary>
+      <p>No. It shows the habits that make writing read as AI so you can fix them. People write this way too, and AI detectors get it wrong often, so a high score is a reason to edit, not proof of anything.</p>
+    </details>
+    <details>
+      <summary>Is my text uploaded or stored?</summary>
+      <p>No. The scanner and the fixes run in your browser. Your draft is saved only in your own browser so a reload doesn't lose it.</p>
+    </details>
+    <details>
+      <summary>Why do em dashes make writing look like AI?</summary>
+      <p>Chat models used em dashes for asides far more often than most people do, so a draft full of them stands out. A comma, colon or full stop usually works better. Newer models were tuned to avoid them, so their absence proves nothing either.</p>
+    </details>
+    <p class="faq-more">The full list of patterns, with a fix for each, is in <a href="../signs-of-ai-writing/">Signs of AI writing</a>.</p>
   </section>
 </div>
 

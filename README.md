@@ -3,6 +3,7 @@
 Find and fix what makes writing sound like AI.
 
 - **Playground:** paste a draft and see the giveaways highlighted, each with a fix. Click a highlight to apply its fix to your text, use the Fixed tab to apply all the mechanical fixes at once, then copy the final version. [Try it in your browser](https://iamazizhaider.github.io/unbot-voice/). Nothing you paste is uploaded.
+- **Guide:** [Signs of AI writing](https://iamazizhaider.github.io/unbot-voice/signs-of-ai-writing/), every pattern the scanner knows, with a fix for each.
 - **Claude skill:** rewrites drafts, audits them, or writes in your own voice.
 
 ## What it does
