@@ -184,7 +184,89 @@
     return out;
   }
 
-  const api = { fix, diff };
+  // ---- Per-highlight suggestions ----
+  // Each option is plain data: replace text[start, end) with `text`. The page applies it.
+
+  function sentenceAround(text, start, end) {
+    let s = start;
+    while (s > 0 && text[s - 1] !== "\n" && !(/\s/.test(text[s - 1]) && /[.!?]/.test(text[s - 2] || ""))) s--;
+    let e = end;
+    while (e < text.length && text[e] !== "\n" && !/[.!?]/.test(text[e])) e++;
+    while (e < text.length && /[.!?)"'”’]/.test(text[e])) e++;
+    // Trim surrounding whitespace off the sentence itself.
+    while (s < e && /\s/.test(text[s])) s++;
+    while (e > s && /\s/.test(text[e - 1])) e--;
+    return [s, e];
+  }
+
+  // When deleting, also take the space after it (and the line break, if the line empties).
+  function widenDeletion(text, start, end) {
+    while (end < text.length && /[ \t]/.test(text[end])) end++;
+    const lineStart = start === 0 || text[start - 1] === "\n";
+    if (lineStart && text[end] === "\n") end++;
+    else if (end === text.length) while (start > 0 && /[ \t]/.test(text[start - 1])) start--;
+    return [start, end];
+  }
+
+  const THREE = /^(.+?), (.+?),? and (.+)$/i;
+  const FUNC = new Set(("that this these those my our your their his her its of in on at for to with by from " +
+    "about into over every each both all and or but as is are was were be been").split(" "));
+
+  function suggest(text, hit, opts) {
+    const out = [];
+    const span = text.slice(hit.start, hit.end);
+    const op = (start, end, rep, label, kind) => {
+      if (rep === "") [start, end] = widenDeletion(text, start, end);
+      out.push({ start, end, text: rep, label, kind: kind || "replace", before: text.slice(start, end) });
+    };
+
+    // Placeholders: the writer types the real value.
+    if (hit.pattern === "placeholder") {
+      out.push({ kind: "fill", start: hit.start, end: hit.end, before: span, label: "Fill in" });
+      return out;
+    }
+
+    // Lists of three: let the writer pick which two to keep.
+    if (hit.pattern === "rule of three") {
+      const m = span.match(THREE);
+      if (m) {
+        let [a, b, c] = [m[1], m[2], m[3]], pre = "", post = "";
+        // The scanner's item can swallow a neighbouring function word ("that consistency",
+        // "leadership at"). Keep those outside the list so dropping an item stays grammatical.
+        const fa = a.match(/^(\S+) (.+)$/);
+        if (fa && FUNC.has(fa[1].toLowerCase())) { pre = fa[1] + " "; a = fa[2]; }
+        const fc = c.match(/^(.+) (\S+)$/);
+        if (fc && FUNC.has(fc[2].toLowerCase())) { post = " " + fc[2]; c = fc[1]; }
+        const endsClean = !!post || hit.end >= text.length || /^\s*([.!?,;:\n]|$)/.test(text.slice(hit.end, hit.end + 2));
+        const keep = (x, y) => op(hit.start, hit.end, `${pre}${x} and ${y}${post}`, `Keep “${x} and ${y}”`);
+        // The scanner only sees up to two words per item, so the first and last items may be
+        // cut off ("supply [chain operations]"). Dropping the middle one is always safe; the
+        // ends only when they're clearly whole.
+        if (!/ /.test(a)) keep(b, c);
+        keep(a, c);
+        if (endsClean) keep(a, b);
+      }
+      return out;
+    }
+
+    // Single words: swap just the word when we have a plain alternative.
+    if (hit.category === "language") {
+      let w = span;
+      for (const [rx, to] of wordRules) w = w.replace(rx, (m) => matchCase(m, to));
+      if (w !== span) { op(hit.start, hit.end, w, w ? `Replace with “${w}”` : `Delete “${span}”`); return out; }
+    }
+
+    // Otherwise rewrite the sentence with the safe fixes, if that changes it.
+    const [s, e] = sentenceAround(text, hit.start, hit.end);
+    const sentence = text.slice(s, e);
+    const fixed = fix(sentence, opts);
+    // Only offer it if the rewrite actually removes what was flagged.
+    const norm = (x) => x.toLowerCase().replace(/\s+/g, " ");
+    if (fixed !== sentence && !norm(fixed).includes(norm(span).trim())) op(s, e, fixed, fixed ? "Rewrite sentence" : "Delete sentence");
+    return out;
+  }
+
+  const api = { fix, diff, suggest };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.UnbotFix = api;
 })(typeof globalThis !== "undefined" ? globalThis : this);

@@ -149,8 +149,6 @@ mark.flash { box-shadow: 0 0 0 3px var(--focus); }
 
 .hits { list-style: none; margin: 0; padding: 8px 8px 10px; overflow: auto; overscroll-behavior: contain; }
 .hits:empty { display: none; }
-.hits li button { display: block; width: 100%; text-align: left; border: 0; background: none; padding: 10px 10px; border-radius: 9px; cursor: pointer; }
-.hits li button:hover { background: var(--surface-2); }
 .hit-top { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); }
 .hit-top .dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
 .hit-top .ln { margin-left: auto; font-variant-numeric: tabular-nums; }
@@ -203,6 +201,40 @@ mark.flash { box-shadow: 0 0 0 3px var(--focus); }
 .left p { margin: 0 14px 10px; color: var(--muted); font-size: 13px; }
 .toast { position: fixed; left: 50%; bottom: max(20px, env(safe-area-inset-bottom)); transform: translateX(-50%); background: var(--text); color: var(--bg); padding: 8px 14px; border-radius: 9px; font-size: 14px; opacity: 0; pointer-events: none; transition: opacity .2s; max-width: calc(100vw - 32px); }
 .toast.on { opacity: 1; }
+
+/* Footer actions */
+.editor-foot { align-items: center; }
+.foot-left, .foot-right { display: flex; gap: 8px 14px; align-items: center; flex-wrap: wrap; }
+.foot-right label { display: inline-flex; gap: 6px; align-items: center; cursor: pointer; }
+.btn:disabled { opacity: .45; cursor: default; }
+.btn:disabled:hover { background: var(--surface); }
+
+/* Fix actions on each highlight */
+.hits li { border-radius: 9px; }
+.hits li:hover { background: var(--surface-2); }
+.hit-main { color: inherit; display: block; width: 100%; text-align: left; border: 0; background: none; padding: 10px 10px 4px; border-radius: 9px; cursor: pointer; }
+.hits li:hover .hit-main:hover { background: none; }
+.acts { display: flex; flex-wrap: wrap; gap: 6px; padding: 4px 10px 12px 26px; }
+.act { border: 1px solid var(--border); background: var(--surface); border-radius: 7px; padding: 4px 9px; font-size: 13px; cursor: pointer; text-align: left; max-width: 100%; overflow-wrap: anywhere; }
+.act:hover { border-color: var(--focus); }
+.act.apply { border-color: color-mix(in srgb, var(--low) 55%, var(--border)); }
+.act.quiet { color: var(--muted); border-style: dashed; }
+.pv { flex-basis: 100%; font-size: 13px; color: var(--muted); padding: 6px 8px; background: var(--surface-2); border-radius: 7px; overflow-wrap: anywhere; }
+.hits li:hover .pv { background: var(--surface); }
+.pv ins { text-decoration: none; background: var(--ins-bg); color: var(--text); border-radius: 3px; }
+.pv del { text-decoration-color: var(--very-high); background: var(--del-bg); border-radius: 3px; }
+.fill { display: flex; gap: 6px; flex-basis: 100%; }
+.fill input { flex: 1; min-width: 0; font: inherit; font-size: 14px; padding: 4px 8px; border: 1px solid var(--border); border-radius: 7px; background: var(--surface); color: var(--text); }
+.linkish { border: 0; background: none; color: var(--muted); font-size: 13px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; padding: 0 18px 14px; text-align: left; }
+
+/* Popover when clicking a highlight */
+.editor-card { position: relative; }
+.pop { position: absolute; z-index: 5; width: min(380px, calc(100% - 24px)); background: var(--surface); border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,.18); padding: 2px 0 0; }
+.pop .hit-main { cursor: default; }
+.pop-close { position: absolute; right: 6px; top: 6px; border: 0; background: none; font-size: 18px; line-height: 1; padding: 4px 8px; cursor: pointer; color: var(--muted); border-radius: 6px; }
+.pop-close:hover { background: var(--surface-2); }
+.pop .acts { padding-left: 12px; }
+.pop .hit-main { padding: 12px 34px 4px 12px; }
 
 /* Small screens */
 @media (max-width: 560px) {
@@ -265,7 +297,7 @@ mark.flash { box-shadow: 0 0 0 3px var(--focus); }
           <div class="fixed-sum" id="fixed-sum" aria-live="polite"></div>
           <div class="fixed-actions">
             <label><input type="checkbox" id="show-changes" checked> Show changes</label>
-            <button class="btn" type="button" id="use-fixed" title="Replace your draft with the fixed text">Use as draft</button>
+            <button class="btn" type="button" id="use-fixed" title="Apply every automatic fix to your text">Apply all to my text</button>
             <button class="btn primary" type="button" id="copy-fixed">Copy text</button>
           </div>
         </div>
@@ -276,9 +308,17 @@ mark.flash { box-shadow: 0 0 0 3px var(--focus); }
           <ul id="left-list"></ul>
         </details>
       </div>
+      <div class="pop" id="pop" hidden role="dialog" aria-label="Fix this"></div>
       <div class="editor-foot">
-        <label><input type="checkbox" id="quotes"> Count words inside quotes</label>
-        <span id="wordcount">0 words</span>
+        <div class="foot-left">
+          <label><input type="checkbox" id="quotes"> Count words inside quotes</label>
+          <span id="wordcount">0 words</span>
+        </div>
+        <div class="foot-right">
+          <label title="Remove **bold**, __underline__ and # headings when copying, for places like LinkedIn that show them as symbols"><input type="checkbox" id="strip-md"> Remove markdown</label>
+          <button class="btn" type="button" id="undo" disabled>Undo</button>
+          <button class="btn primary" type="button" id="copy-final">Copy final text</button>
+        </div>
       </div>
     </section>
 
@@ -300,6 +340,7 @@ mark.flash { box-shadow: 0 0 0 3px var(--focus); }
         <div class="cats" id="cats"></div>
         <ul class="hits" id="hits"></ul>
         <div class="empty" id="empty">Highlights and fixes show up here.</div>
+        <button class="linkish" type="button" id="unignore" hidden></button>
         <div class="err" id="err" hidden></div>
       </section>
     </aside>
@@ -316,7 +357,7 @@ mark.flash { box-shadow: 0 0 0 3px var(--focus); }
     </div>
     <div>
       <h2>Fix it, not just find it</h2>
-      <p>The Fixed tab handles the mechanical part: filler, stiff words, em dashes, emoji bullets. For the rest, install it as a Claude skill and it rewrites your drafts properly. It can also learn your voice from a few samples. Setup is on <a href="https://github.com/iamazizhaider/unbot-voice">GitHub</a>.</p>
+      <p>Click any highlight to fix it in your text, then copy the final version. The Fixed tab does all the mechanical fixes at once: filler, stiff words, em dashes, emoji bullets. For the rest, install it as a Claude skill and it rewrites your drafts properly. It can also learn your voice from a few samples. Setup is on <a href="https://github.com/iamazizhaider/unbot-voice">GitHub</a>.</p>
     </div>
   </section>
 </div>
@@ -419,8 +460,119 @@ mark.flash { box-shadow: 0 0 0 3px var(--focus); }
   $("copy-fixed").addEventListener("click", () => { if (fixed) copy(fixed.text, "Fixed text copied"); });
   $("use-fixed").addEventListener("click", () => {
     if (!fixed) return;
-    input.value = fixed.text; run(); setTab("review"); toast("Draft replaced with the fixed text");
+    setText(fixed.text); setTab("review"); toast("All automatic fixes applied. Undo is in the footer.");
   });
+
+  // ---- Editing the real text: apply, fill, ignore, undo, copy ----
+  const undoStack = [];
+  function setText(next) {
+    if (next === input.value) return;
+    undoStack.push(input.value); if (undoStack.length > 100) undoStack.shift();
+    input.value = next; run(); saveDraft();
+  }
+  $("undo").addEventListener("click", () => {
+    if (!undoStack.length) return;
+    input.value = undoStack.pop(); run(); saveDraft(); toast("Undone");
+  });
+  function refreshUndo() { $("undo").disabled = undoStack.length === 0; }
+
+  const ignored = new Set();
+  const ignoreKey = (h) => h.pattern + "\u0000" + h.match.toLowerCase();
+
+  let sugg = new Map();
+  function suggestionsFor(i) {
+    if (!sugg.has(i)) sugg.set(i, UnbotFix.suggest(input.value, result.hits[i], { includeQuotes: $("quotes").checked }));
+    return sugg.get(i);
+  }
+
+  function diffHtml(a, b) {
+    const d = UnbotFix.diff(a, b) || [["-", a], ["+", b]];
+    return d.map(([op, s]) => op === "=" ? esc(s) : op === "+" ? `<ins>${esc(s)}</ins>` : `<del>${esc(s)}</del>`).join("");
+  }
+
+  // One card's worth of markup, shared by the side list and the popover.
+  function hitCard(h, i, inPop) {
+    const opts = suggestionsFor(i);
+    let acts = "";
+    opts.forEach((o, j) => {
+      if (o.kind === "fill") {
+        acts += `<form class="fill" data-i="${i}" data-j="${j}"><input type="text" aria-label="Replace ${esc(o.before)} with" placeholder="Replace ${esc(o.before)} with…"><button class="act apply" type="submit">Fill in</button></form>`;
+      } else {
+        const sentence = /sentence$/.test(o.label);
+        acts += `<button class="act apply" type="button" data-i="${i}" data-j="${j}">${esc(o.label)}</button>`;
+        if (sentence) acts += `<div class="pv">${diffHtml(o.before, o.text)}</div>`;
+      }
+    });
+    if (!opts.length) acts += `<button class="act quiet" type="button" data-edit="${i}">Edit it myself</button>`;
+    acts += `<button class="act quiet" type="button" data-ignore="${i}">Ignore</button>`;
+    return `<button class="hit-main" type="button" ${inPop ? "tabindex=-1" : `data-locate="${i}"`}>
+        <div class="hit-top"><span class="dot c-${h.category}"></span>${esc(h.pattern)}<span class="ln">line ${h.line}</span></div>
+        <div class="hit-match">“${esc(h.match)}”</div>
+        <div class="hit-tip">${esc(h.tip)}</div></button><div class="acts">${acts}</div>`;
+  }
+
+  function applyOption(i, j, value) {
+    const o = suggestionsFor(i)[j]; if (!o) return;
+    const text = input.value;
+    if (text.slice(o.start, o.end) !== o.before) { run(); toast("The text changed. Try again."); return; }
+    let next;
+    if (o.kind === "fill") {
+      if (!value) return;
+      next = text.split(o.before).join(value);
+    } else next = text.slice(0, o.start) + o.text + text.slice(o.end);
+    closePop(); setText(next); toast("Applied to your text");
+  }
+
+  function onActionClick(e) {
+    const a = e.target.closest("button.act[data-j]");
+    if (a) { applyOption(+a.dataset.i, +a.dataset.j); return true; }
+    const ig = e.target.closest("[data-ignore]");
+    if (ig) { ignored.add(ignoreKey(result.hits[+ig.dataset.ignore])); closePop(); renderPanel(); if (tab === "review") renderReview(); return true; }
+    const ed = e.target.closest("[data-edit]");
+    if (ed) { const h = result.hits[+ed.dataset.edit]; closePop(); setTab("edit"); input.focus(); input.setSelectionRange(h.start, h.end); return true; }
+    return false;
+  }
+  function onFillSubmit(e) {
+    const f = e.target.closest("form.fill"); if (!f) return;
+    e.preventDefault(); applyOption(+f.dataset.i, +f.dataset.j, f.querySelector("input").value.trim());
+  }
+
+  // Popover on a highlight.
+  const pop = $("pop");
+  function closePop() { pop.hidden = true; pop.innerHTML = ""; }
+  function openPop(mark) {
+    const i = +mark.dataset.i, h = result.hits[i];
+    pop.innerHTML = `<button class="pop-close" type="button" aria-label="Close">×</button>` + hitCard(h, i, true);
+    pop.hidden = false;
+    const card = pop.parentElement.getBoundingClientRect(), r = mark.getBoundingClientRect();
+    const left = Math.max(12, Math.min(r.left - card.left, card.width - pop.offsetWidth - 12));
+    let top = r.bottom - card.top + 6;
+    // Flip above the highlight if it would run past the bottom of the screen.
+    if (r.bottom + pop.offsetHeight + 12 > window.innerHeight && r.top - pop.offsetHeight - 6 > 0) top = r.top - card.top - pop.offsetHeight - 6;
+    pop.style.left = left + "px"; pop.style.top = top + "px";
+    const first = pop.querySelector(".act, input"); if (first) first.focus({ preventScroll: true });
+  }
+  review.addEventListener("click", (e) => { const m = e.target.closest("mark[data-i]"); if (m && !m.classList.contains("dim")) openPop(m); });
+  pop.addEventListener("click", (e) => { if (e.target.closest(".pop-close")) { closePop(); return; } onActionClick(e); });
+  pop.addEventListener("submit", onFillSubmit);
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !pop.hidden) closePop(); });
+  document.addEventListener("click", (e) => { if (!pop.hidden && !pop.contains(e.target) && !e.target.closest("mark")) closePop(); });
+  review.addEventListener("scroll", closePop);
+
+  // Copy the finished text.
+  const stripMd = (s) => s
+    .replace(/\*\*([^*\n]+)\*\*/g, "$1").replace(/__([^_\n]+)__/g, "$1")
+    .replace(/^#{1,6}[ \t]+/gm, "");
+  $("strip-md").checked = store.get("unbot-voice-strip") === "1";
+  $("strip-md").addEventListener("change", () => store.set("unbot-voice-strip", $("strip-md").checked ? "1" : "0"));
+  $("copy-final").addEventListener("click", () => {
+    const t = input.value.trim(); if (!t) { toast("Nothing to copy yet"); return; }
+    copy($("strip-md").checked ? stripMd(t) : t, "Final text copied. Paste it wherever it's going.");
+  });
+
+  // Keep the draft in this browser only, so a reload doesn't lose work.
+  let draftT;
+  function saveDraft() { clearTimeout(draftT); draftT = setTimeout(() => store.set("unbot-voice-draft", input.value), 300); }
   $("copy-prompt").addEventListener("click", () => {
     if (!fixed) return;
     const issues = fixed.result.hits.map((h) => `- "${h.match}" (${h.pattern}): ${h.tip}`).join("\n");
@@ -445,7 +597,7 @@ mark.flash { box-shadow: 0 0 0 3px var(--focus); }
       if (o < 0) html += chunk;
       else {
         const h = hits[o];
-        const cls = `c-${h.category} w${h.weight}` + (hidden.has(h.category) ? " dim" : "");
+        const cls = `c-${h.category} w${h.weight}` + (hidden.has(h.category) || ignored.has(ignoreKey(h)) ? " dim" : "");
         html += `<mark class="${cls}" data-i="${o}" title="${esc(h.pattern)}: ${esc(h.tip)}">${chunk}</mark>`;
       }
       k = j;
@@ -483,12 +635,12 @@ mark.flash { box-shadow: 0 0 0 3px var(--focus); }
       `<button class="chip" type="button" data-cat="${c}" aria-pressed="${!hidden.has(c)}"><span class="dot c-${c}"></span>${CAT_NAMES[c]} <span class="n">${counts[c]}</span></button>`).join("");
 
     const order = { "residue": 0, "forced-voice": 1, "content": 2, "language": 3, "style": 4 };
-    const list = r.hits.map((h, i) => [h, i]).filter(([h]) => !hidden.has(h.category))
+    const nIgnored = r.hits.filter((h) => ignored.has(ignoreKey(h))).length;
+    const list = r.hits.map((h, i) => [h, i]).filter(([h]) => !hidden.has(h.category) && !ignored.has(ignoreKey(h)))
       .sort((a, b) => b[0].weight - a[0].weight || order[a[0].category] - order[b[0].category] || a[0].start - b[0].start);
-    hitsEl.innerHTML = list.map(([h, i]) => `<li><button type="button" data-i="${i}">
-        <div class="hit-top"><span class="dot c-${h.category}"></span>${esc(h.pattern)}<span class="ln">line ${h.line}</span></div>
-        <div class="hit-match">“${esc(h.match)}”</div>
-        <div class="hit-tip">${esc(h.tip)}</div></button></li>`).join("");
+    hitsEl.innerHTML = list.map(([h, i]) => `<li>${hitCard(h, i, false)}</li>`).join("");
+    $("unignore").hidden = nIgnored === 0;
+    $("unignore").textContent = `Show ${nIgnored} ignored`;
     $("empty").hidden = r.hits.length > 0;
     $("empty").textContent = "No known patterns found. Still worth a read for generic claims, which no scanner can catch.";
   }
@@ -496,25 +648,29 @@ mark.flash { box-shadow: 0 0 0 3px var(--focus); }
   function run() {
     if (!compiled) return;
     result = Unbot.scan(input.value, compiled, { includeQuotes: $("quotes").checked });
+    sugg = new Map(); closePop(); refreshUndo();
     renderPanel();
     if (tab === "review") renderReview();
     if (tab === "fixed") renderFixed();
   }
 
-  let t; input.addEventListener("input", () => { clearTimeout(t); t = setTimeout(run, 150); });
+  let t; input.addEventListener("input", () => { clearTimeout(t); t = setTimeout(run, 150); saveDraft(); });
   $("quotes").addEventListener("change", run);
   document.querySelectorAll("[data-sample]").forEach((btn) => btn.addEventListener("click", () => {
-    input.value = SAMPLES[btn.dataset.sample]; run(); setTab("review");
+    setText(SAMPLES[btn.dataset.sample]); setTab("review");
   }));
+  $("unignore").addEventListener("click", () => { ignored.clear(); renderPanel(); if (tab === "review") renderReview(); });
   $("cats").addEventListener("click", (e) => {
     const c = e.target.closest(".chip"); if (!c) return;
     const cat = c.dataset.cat; hidden.has(cat) ? hidden.delete(cat) : hidden.add(cat);
     renderPanel(); if (!review.hidden) renderReview();
   });
+  $("hits").addEventListener("submit", onFillSubmit);
   $("hits").addEventListener("click", (e) => {
-    const btn = e.target.closest("button[data-i]"); if (!btn) return;
+    if (onActionClick(e)) return;
+    const btn = e.target.closest("button[data-locate]"); if (!btn) return;
     setTab("review");
-    const m = review.querySelector(`mark[data-i="${btn.dataset.i}"]`);
+    const m = review.querySelector(`mark[data-i="${btn.dataset.locate}"]`);
     if (m) { m.scrollIntoView({ block: "center", behavior: "smooth" }); m.classList.add("flash"); setTimeout(() => m.classList.remove("flash"), 1200); }
   });
   input.addEventListener("paste", () => setTimeout(() => { run(); if (input.value.trim()) setTab("review"); }, 0));
@@ -524,7 +680,12 @@ mark.flash { box-shadow: 0 0 0 3px var(--focus); }
       compiled = Unbot.compile(data);
       const params = new URLSearchParams(location.hash.slice(1));
       const want = params.get("sample"), wantTab = params.get("tab");
-      if (want && SAMPLES[want]) { input.value = SAMPLES[want]; run(); setTab(["edit", "review", "fixed"].includes(wantTab) ? wantTab : "review"); } else run();
+      if (want && SAMPLES[want]) { input.value = SAMPLES[want]; run(); setTab(["edit", "review", "fixed"].includes(wantTab) ? wantTab : "review"); }
+      else {
+        const draft = store.get("unbot-voice-draft");
+        if (draft && !input.value) input.value = draft;
+        run();
+      }
     })
     .catch(() => {
       $("err").hidden = false;
