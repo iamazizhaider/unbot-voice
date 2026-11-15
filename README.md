@@ -2,7 +2,7 @@
 
 Find and fix what makes writing sound like AI.
 
-- **Playground:** paste a draft and see the giveaways highlighted, each with a fix. [Try it in your browser](https://iamazizhaider.github.io/unbot-voice/). Nothing you paste is uploaded.
+- **Playground:** paste a draft and see the giveaways highlighted, each with a fix. The Fixed tab applies the mechanical fixes for you and shows what's left. [Try it in your browser](https://iamazizhaider.github.io/unbot-voice/). Nothing you paste is uploaded.
 - **Claude skill:** rewrites drafts, audits them, or writes in your own voice.
 
 ## What it does

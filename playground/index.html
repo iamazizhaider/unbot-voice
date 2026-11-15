@@ -27,6 +27,7 @@
   --c-language: #1d4ed8;    --c-language-bg: #e0e9ff;
   --c-style: #0f766e;       --c-style-bg: #d7f3ee;
   --shadow: 0 1px 2px rgba(0,0,0,.04), 0 4px 16px rgba(0,0,0,.04);
+  --ins-bg: #d9f2e2; --del-bg: #fbe4e4;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
@@ -39,6 +40,7 @@
     --c-language: #7aa2ff;    --c-language-bg: rgba(122,162,255,.18);
     --c-style: #2dd4bf;       --c-style-bg: rgba(45,212,191,.16);
     --shadow: none;
+    --ins-bg: rgba(95,207,142,.2); --del-bg: rgba(248,113,113,.14);
   }
 }
 :root[data-theme="dark"] {
@@ -51,6 +53,7 @@
   --c-language: #7aa2ff;    --c-language-bg: rgba(122,162,255,.18);
   --c-style: #2dd4bf;       --c-style-bg: rgba(45,212,191,.16);
   --shadow: none;
+  --ins-bg: rgba(95,207,142,.2); --del-bg: rgba(248,113,113,.14);
 }
 
 * { box-sizing: border-box; }
@@ -63,7 +66,7 @@ a { color: inherit; text-underline-offset: 3px; }
 button { font: inherit; color: inherit; }
 :focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 
-.wrap { max-width: 1180px; margin: 0 auto; padding: 0 16px; }
+.wrap { max-width: 1180px; margin: 0 auto; padding: 0 max(16px, env(safe-area-inset-right)) 0 max(16px, env(safe-area-inset-left)); }
 header.top { display: flex; align-items: center; justify-content: space-between; padding: 20px 0 8px; gap: 12px; }
 .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: -.01em; font-size: 18px; text-decoration: none; }
 .brand-mark { width: 28px; height: 28px; border-radius: 7px; background: var(--text); color: var(--bg); display: grid; place-items: center; }
@@ -78,8 +81,9 @@ header.top { display: flex; align-items: center; justify-content: space-between;
 .grid { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: 20px; align-items: start; padding-bottom: 40px; }
 @media (max-width: 880px) { .grid { grid-template-columns: 1fr; } }
 
-.card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--shadow); }
-.editor-card { display: flex; flex-direction: column; min-height: 520px; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--shadow); min-width: 0; }
+.editor-card { display: flex; flex-direction: column; }
+@media (min-width: 881px) { .editor-card { min-height: min(560px, calc(100vh - 32px)); } }
 .toolbar { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
 .tabs { display: inline-flex; background: var(--surface-2); border-radius: 9px; padding: 3px; }
 .tabs button { border: 0; background: none; padding: 5px 12px; border-radius: 7px; cursor: pointer; font-size: 14px; color: var(--muted); }
@@ -91,8 +95,9 @@ header.top { display: flex; align-items: center; justify-content: space-between;
 textarea, .review {
   flex: 1; width: 100%; border: 0; margin: 0; padding: 18px 20px; background: transparent; color: var(--text);
   font: 16px/1.7 ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  white-space: pre-wrap; overflow-wrap: anywhere; min-height: 440px;
+  white-space: pre-wrap; overflow-wrap: anywhere; min-height: clamp(240px, 55vh, 440px);
 }
+@media (max-width: 560px) { textarea, .review, .fixed-text { padding: 14px 14px; } }
 textarea { resize: vertical; outline: none; }
 textarea::placeholder { color: var(--muted); }
 .review { overflow: auto; }
@@ -110,8 +115,15 @@ mark.w1 { border-bottom-style: dotted; }
 mark.dim { background: transparent; border-bottom-color: transparent; }
 mark.flash { box-shadow: 0 0 0 3px var(--focus); }
 
-.side { display: flex; flex-direction: column; gap: 16px; position: sticky; top: 16px; }
-@media (max-width: 880px) { .side { position: static; } }
+.side { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.side .score-card { flex: none; }
+.hits-card { display: flex; flex-direction: column; min-height: 0; }
+/* On desktop the panel sticks and its hit list scrolls inside, so it always fits the viewport. */
+@media (min-width: 881px) {
+  .side { position: sticky; top: 16px; max-height: calc(100vh - 32px); }
+  .hits-card { flex: 1 1 auto; }
+  .hits-card .hits { flex: 1 1 auto; min-height: 120px; }
+}
 .score-card { padding: 18px 20px; }
 .score-row { display: flex; align-items: baseline; gap: 10px; }
 .score { font-size: 54px; font-weight: 750; letter-spacing: -.03em; line-height: 1; font-variant-numeric: tabular-nums; }
@@ -135,8 +147,8 @@ mark.flash { box-shadow: 0 0 0 3px var(--focus); }
 .chip[aria-pressed="false"] { opacity: .45; }
 .chip .n { font-variant-numeric: tabular-nums; color: var(--muted); }
 
-.hits { list-style: none; margin: 0; padding: 8px 8px 10px; max-height: 52vh; overflow: auto; }
-@media (max-width: 880px) { .hits { max-height: none; } }
+.hits { list-style: none; margin: 0; padding: 8px 8px 10px; overflow: auto; overscroll-behavior: contain; }
+.hits:empty { display: none; }
 .hits li button { display: block; width: 100%; text-align: left; border: 0; background: none; padding: 10px 10px; border-radius: 9px; cursor: pointer; }
 .hits li button:hover { background: var(--surface-2); }
 .hit-top { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); }
@@ -157,6 +169,62 @@ mark.flash { box-shadow: 0 0 0 3px var(--focus); }
 .below p { margin: 0; color: var(--muted); font-size: 15px; }
 .below code { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; background: var(--surface-2); padding: 1px 5px; border-radius: 5px; }
 .err { padding: 14px 16px; color: var(--very-high); font-size: 14px; }
+
+/* Fixed tab */
+.fixed { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+.fixed[hidden] { display: none; }
+.fixed-bar { display: flex; align-items: center; justify-content: space-between; gap: 8px 12px; flex-wrap: wrap; padding: 10px 14px; border-bottom: 1px solid var(--border); background: var(--surface-2); font-size: 14px; }
+.fixed-sum { color: var(--muted); }
+.fixed-sum b { color: var(--text); font-variant-numeric: tabular-nums; }
+.fixed-actions { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.fixed-actions label { display: inline-flex; gap: 6px; align-items: center; cursor: pointer; font-size: 13px; color: var(--muted); margin-right: 4px; }
+.btn { border: 1px solid var(--border); background: var(--surface); border-radius: 8px; padding: 5px 10px; cursor: pointer; font-size: 13px; white-space: nowrap; }
+.btn:hover { background: var(--bg); }
+.btn.primary { background: var(--text); color: var(--bg); border-color: var(--text); }
+.btn.primary:hover { opacity: .88; background: var(--text); }
+.fixed-text {
+  flex: 1; padding: 18px 20px; white-space: pre-wrap; overflow-wrap: anywhere; overflow: auto;
+  font: 16px/1.7 ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  min-height: clamp(200px, 40vh, 360px);
+}
+.fixed-text:empty::before { content: "Nothing to fix yet. Paste some text in Edit."; color: var(--muted); }
+.fixed-text ins { text-decoration: none; background: var(--ins-bg); border-radius: 3px; padding: 0 1px; }
+.fixed-text del { color: var(--muted); text-decoration-color: var(--very-high); background: var(--del-bg); border-radius: 3px; }
+.fixed-text.clean del { display: none; }
+.fixed-text.clean ins { background: none; padding: 0; }
+.left { border-top: 1px solid var(--border); font-size: 14px; }
+.left summary { padding: 10px 14px; cursor: pointer; color: var(--muted); }
+.left summary b { color: var(--text); }
+.left ul { list-style: none; margin: 0; padding: 0 14px 12px; max-height: 260px; overflow: auto; }
+.left li { padding: 6px 0; border-top: 1px dashed var(--border); }
+.left li .m { font-weight: 600; overflow-wrap: anywhere; }
+.left li .t { color: var(--muted); }
+.left li .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+.left p { margin: 0 14px 10px; color: var(--muted); font-size: 13px; }
+.toast { position: fixed; left: 50%; bottom: max(20px, env(safe-area-inset-bottom)); transform: translateX(-50%); background: var(--text); color: var(--bg); padding: 8px 14px; border-radius: 9px; font-size: 14px; opacity: 0; pointer-events: none; transition: opacity .2s; max-width: calc(100vw - 32px); }
+.toast.on { opacity: 1; }
+
+/* Small screens */
+@media (max-width: 560px) {
+  header.top { padding-top: 14px; }
+  .hero { padding: 16px 0 16px; }
+  .hero p { font-size: 16px; }
+  .grid { gap: 14px; }
+  .score { font-size: 44px; }
+  .tabs button { padding: 5px 10px; }
+  .fixed-bar { padding: 10px 12px; }
+}
+/* Short screens (landscape phones): keep the tool above the fold. */
+@media (max-height: 520px) and (orientation: landscape) {
+  header.top { padding: 10px 0 4px; }
+  .hero { padding: 8px 0 12px; }
+  .hero h1 { font-size: 24px; max-width: none; margin-bottom: 0; }
+  .hero p { display: none; }
+}
+@media (max-width: 360px) {
+  .tabs button { padding: 5px 8px; font-size: 13px; }
+  .samples > span { display: none; }
+}
 </style>
 </head>
 <body>
@@ -182,6 +250,7 @@ mark.flash { box-shadow: 0 0 0 3px var(--focus); }
         <div class="tabs" role="tablist">
           <button role="tab" id="tab-edit" aria-selected="true" aria-controls="input">Edit</button>
           <button role="tab" id="tab-review" aria-selected="false" aria-controls="review">Highlights</button>
+          <button role="tab" id="tab-fixed" aria-selected="false" aria-controls="fixed">Fixed</button>
         </div>
         <div class="samples"><span>Try:</span>
           <button type="button" data-sample="linkedin">LinkedIn post</button>
@@ -191,6 +260,22 @@ mark.flash { box-shadow: 0 0 0 3px var(--focus); }
       </div>
       <textarea id="input" spellcheck="false" placeholder="Paste a post, email, essay or doc here…" aria-label="Text to scan"></textarea>
       <div class="review" id="review" hidden tabindex="0" aria-label="Text with highlights"></div>
+      <div class="fixed" id="fixed" hidden>
+        <div class="fixed-bar">
+          <div class="fixed-sum" id="fixed-sum" aria-live="polite"></div>
+          <div class="fixed-actions">
+            <label><input type="checkbox" id="show-changes" checked> Show changes</label>
+            <button class="btn" type="button" id="use-fixed" title="Replace your draft with the fixed text">Use as draft</button>
+            <button class="btn primary" type="button" id="copy-fixed">Copy text</button>
+          </div>
+        </div>
+        <div class="fixed-text" id="fixed-text" tabindex="0" aria-label="Fixed text"></div>
+        <details class="left" id="left" hidden>
+          <summary></summary>
+          <p>These need facts or a judgment call, so they're left for you. Or hand them to Claude with the unbot-voice skill: <button class="btn" type="button" id="copy-prompt">Copy prompt for Claude</button></p>
+          <ul id="left-list"></ul>
+        </details>
+      </div>
       <div class="editor-foot">
         <label><input type="checkbox" id="quotes"> Count words inside quotes</label>
         <span id="wordcount">0 words</span>
@@ -210,7 +295,7 @@ mark.flash { box-shadow: 0 0 0 3px var(--focus); }
         <ul class="flags" id="flags"></ul>
       </section>
 
-      <section class="card" aria-label="What was found">
+      <section class="card hits-card" aria-label="What was found">
         <h2 class="section-title">What gives it away</h2>
         <div class="cats" id="cats"></div>
         <ul class="hits" id="hits"></ul>
@@ -231,12 +316,14 @@ mark.flash { box-shadow: 0 0 0 3px var(--focus); }
     </div>
     <div>
       <h2>Fix it, not just find it</h2>
-      <p>Install it as a Claude skill and it rewrites your drafts, not just flags them. It can also learn your voice from a few samples. Setup is on <a href="https://github.com/iamazizhaider/unbot-voice">GitHub</a>.</p>
+      <p>The Fixed tab handles the mechanical part: filler, stiff words, em dashes, emoji bullets. For the rest, install it as a Claude skill and it rewrites your drafts properly. It can also learn your voice from a few samples. Setup is on <a href="https://github.com/iamazizhaider/unbot-voice">GitHub</a>.</p>
     </div>
   </section>
 </div>
 
+<div class="toast" id="toast" role="status"></div>
 <script src="scan.js"></script>
+<script src="fix.js"></script>
 <script>
 (() => {
   "use strict";
@@ -267,15 +354,73 @@ mark.flash { box-shadow: 0 0 0 3px var(--focus); }
 
   const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
+  const fixedPane = $("fixed");
+  let tab = "edit";
   function setTab(which) {
-    const rev = which === "review";
-    $("tab-edit").setAttribute("aria-selected", String(!rev));
-    $("tab-review").setAttribute("aria-selected", String(rev));
-    input.hidden = rev; review.hidden = !rev;
-    if (rev) renderReview();
+    tab = which;
+    for (const t of ["edit", "review", "fixed"]) $("tab-" + t).setAttribute("aria-selected", String(t === which));
+    input.hidden = which !== "edit"; review.hidden = which !== "review"; fixedPane.hidden = which !== "fixed";
+    if (which === "review") renderReview();
+    if (which === "fixed") renderFixed();
   }
   $("tab-edit").addEventListener("click", () => { setTab("edit"); input.focus(); });
   $("tab-review").addEventListener("click", () => setTab("review"));
+  $("tab-fixed").addEventListener("click", () => setTab("fixed"));
+
+  // Fixed tab: apply the mechanical fixes, rescan, and list what's left.
+  let fixed = null;
+  function computeFixed() {
+    const text = input.value;
+    if (!compiled || !text.trim()) { fixed = null; return; }
+    const opts = { includeQuotes: $("quotes").checked };
+    const out = UnbotFix.fix(text, opts);
+    fixed = { text: out, result: Unbot.scan(out, compiled, opts) };
+  }
+  function renderFixed() {
+    computeFixed();
+    const box = $("fixed-text"), left = $("left");
+    if (!fixed) { box.textContent = ""; $("fixed-sum").textContent = ""; left.hidden = true; return; }
+    const before = result ? result.score : 0, after = fixed.result.score;
+    const fmt = (n) => n.toLocaleString(undefined, { maximumFractionDigits: 1 });
+    // diff() returns null for very large rewrites; then show the clean text without marks.
+    const parts = UnbotFix.diff(input.value.trim(), fixed.text) || [["=", fixed.text]];
+    const marked = parts.length > 1 || parts[0][0] !== "=";
+    $("show-changes").parentElement.hidden = !marked;
+    const changes = fixed.text !== input.value.trim();
+    $("fixed-sum").innerHTML = changes
+      ? `Score <b>${fmt(before)}</b> → <b>${fmt(after)}</b> · ${fixed.result.band.text}`
+      : "No mechanical fixes to make here.";
+    box.innerHTML = parts.map(([op, s]) => op === "=" ? esc(s) : op === "+" ? `<ins>${esc(s)}</ins>` : `<del>${esc(s)}</del>`).join("");
+    box.classList.toggle("clean", !$("show-changes").checked);
+    const rest = fixed.result.hits;
+    left.hidden = rest.length === 0;
+    left.querySelector("summary").innerHTML = `<b>${rest.length}</b> left for you to fix`;
+    $("left-list").innerHTML = rest.map((h) =>
+      `<li><span class="dot c-${h.category}"></span><span class="m">“${esc(h.match)}”</span> <span class="t">· ${esc(h.tip)}</span></li>`).join("");
+  }
+  $("show-changes").addEventListener("change", () => $("fixed-text").classList.toggle("clean", !$("show-changes").checked));
+
+  let toastT;
+  function toast(msg) { const el = $("toast"); el.textContent = msg; el.classList.add("on"); clearTimeout(toastT); toastT = setTimeout(() => el.classList.remove("on"), 1800); }
+  async function copy(text, msg) {
+    try { await navigator.clipboard.writeText(text); toast(msg); }
+    catch (e) {
+      const ta = document.createElement("textarea"); ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); toast(msg); } catch (e2) { toast("Couldn't copy. Select the text and copy it by hand."); }
+      ta.remove();
+    }
+  }
+  $("copy-fixed").addEventListener("click", () => { if (fixed) copy(fixed.text, "Fixed text copied"); });
+  $("use-fixed").addEventListener("click", () => {
+    if (!fixed) return;
+    input.value = fixed.text; run(); setTab("review"); toast("Draft replaced with the fixed text");
+  });
+  $("copy-prompt").addEventListener("click", () => {
+    if (!fixed) return;
+    const issues = fixed.result.hits.map((h) => `- "${h.match}" (${h.pattern}): ${h.tip}`).join("\n");
+    copy(`/unbot-voice\n\nRewrite this so it reads like a person wrote it. Keep my meaning and facts; if a fix needs a fact you don't have, ask me instead of inventing one.\n\nThe scanner still flags:\n${issues}\n\n---\n${fixed.text}`, "Prompt copied. Paste it into Claude");
+  });
 
   function visibleHits() { return result ? result.hits.filter((h) => !hidden.has(h.category)) : []; }
 
@@ -347,7 +492,8 @@ mark.flash { box-shadow: 0 0 0 3px var(--focus); }
     if (!compiled) return;
     result = Unbot.scan(input.value, compiled, { includeQuotes: $("quotes").checked });
     renderPanel();
-    if (!review.hidden) renderReview();
+    if (tab === "review") renderReview();
+    if (tab === "fixed") renderFixed();
   }
 
   let t; input.addEventListener("input", () => { clearTimeout(t); t = setTimeout(run, 150); });
@@ -371,8 +517,9 @@ mark.flash { box-shadow: 0 0 0 3px var(--focus); }
   fetch(PATTERNS_URL).then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); })
     .then((data) => {
       compiled = Unbot.compile(data);
-      const want = new URLSearchParams(location.hash.slice(1)).get("sample");
-      if (want && SAMPLES[want]) { input.value = SAMPLES[want]; run(); setTab("review"); } else run();
+      const params = new URLSearchParams(location.hash.slice(1));
+      const want = params.get("sample"), wantTab = params.get("tab");
+      if (want && SAMPLES[want]) { input.value = SAMPLES[want]; run(); setTab(["edit", "review", "fixed"].includes(wantTab) ? wantTab : "review"); } else run();
     })
     .catch(() => {
       $("err").hidden = false;
